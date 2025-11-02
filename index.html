@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>《朕即国家：崇祯十七年·工业革命》</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --crimson: #c41f3c;
+            --ink: #1a1a1a;
+            --jade: #00a86b;
+            --paper: #f9f5e9;
+            --shadow: rgba(0,0,0,0.3);
+            --dragon: #8b4513;
+            --bg-dark: #2c1810;
+            --yellow: #ffdd00;
+            --bright-yellow: #ffeb3b;
+            --text-glow: 0 0 8px rgba(255, 221, 0, 0.6);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: var(--paper);
+            font-family: 'KaiTi', 'SimSun', 'Songti SC', 'Noto Sans SC', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        /* 背景：更亮、更清晰的科幻工业图纸 */
+        .bg-container {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 25% 75%, rgba(255, 180, 0, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 75% 25%, rgba(255, 220, 100, 0.3) 0%, transparent 45%),
+                linear-gradient(135deg, #112233 0%, #001122 100%);
+            overflow: hidden;
+        }
+        .bg-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                /* 更亮的科技线条 */
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><filter id="glow"><feGaussianBlur stdDeviation="5" result="blur"/><feFlood flood-color="%23ffdd00"/><feComposite in2="blur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(%23glow)"><path d="M100 380 Q250 280, 400 380 T700 380" stroke="%23ffdd00" stroke-width="3" fill="none" opacity="0.8"/><path d="M120 430 Q270 330, 420 430 T720 430" stroke="%23ffeb3b" stroke-width="2.5" fill="none" opacity="0.7"/><path d="M80 480 Q230 380, 380 480 T680 480" stroke="%23ffff66" stroke-width="2" fill="none" opacity="0.6"/></g><circle cx="400" cy="300" r="100" fill="none" stroke="%23ffdd00" stroke-width="2" opacity="0.6"/><circle cx="200" cy="180" r="50" fill="none" stroke="%23ffeb3b" stroke-width="1.5" opacity="0.5"/><circle cx="600" cy="150" r="40" fill="none" stroke="%23ffff99" stroke-width="1.5" opacity="0.4"/></svg>') center/cover no-repeat,
+                /* 星空 + 火花 */
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1.5" fill="%23ffdd00"/><circle cx="70" cy="30" r="1" fill="%23ffff99"/><circle cx="40" cy="80" r="1.2" fill="%23ffeb3b"/></svg>') repeat;
+            animation: flicker 3s infinite ease-in-out;
+            opacity: 0.9;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 0.9; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.15); }
+        }
+
+        /* 奏折：高对比度 + 发光文字 + 半透明科技底纹 */
+        .memorial {
+            background: 
+                linear-gradient(135deg, rgba(249,245,233,0.98), rgba(230,210,170,0.95)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><text x="15" y="60" font-family="KaiTi" font-size="70" fill="%23996633" opacity="0.06">大明</text><text x="40" y="95" font-family="KaiTi" font-size="50" fill="%23885522" opacity="0.04">崇祯</text></svg>') repeat,
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150"><g opacity="0.12"><path d="M20 50 Q60 30, 100 50 T180 50" stroke="%2300cc66" stroke-width="1.5" fill="none"/><path d="M20 80 Q60 60, 100 80 T180 80" stroke="%2300ff88" stroke-width="1.2" fill="none"/><circle cx="50" cy="100" r="22" fill="none" stroke="%2300ff99" stroke-width="1.5"/><circle cx="150" cy="100" r="18" fill="none" stroke="%2300ffaa" stroke-width="1.5"/></g></svg>') center/60% no-repeat;
+            padding: 18px;
+            border-radius: 16px;
+            border-left: 7px solid var(--crimson);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+            font-size: 1.02em;
+            line-height: 1.85;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            color: var(--bright-yellow) !important;
+            text-shadow: var(--text-glow);
+            backdrop-filter: blur(2px);
+        }
+        .memorial p {
+            margin-bottom: 14px;
+            text-indent: 2em;
+            color: var(--bright-yellow) !important;
+            text-shadow: var(--text-glow);
+            font-weight: 500;
+        }
+        .highlight {
+            color: #ffff66 !important;
+            font-weight: bold;
+            font-size: 1.15em;
+            text-shadow: 0 0 12px rgba(255, 255, 102, 0.8);
+            display: block;
+            margin: 16px 0 8px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        #game {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1;
+        }
+
+        .scroll-header {
+            background: linear-gradient(to bottom, #f9e076, #e6c930);
+            border-radius: 16px;
+            padding: 12px 16px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+            position: relative;
+            overflow: hidden;
+            border: 2.5px solid #d4af37;
+        }
+        .scroll-header::before, .scroll-header::after {
+            content: '';
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            background: radial-gradient(circle at 30% 30%, #fff 12%, transparent 13%), 
+                        radial-gradient(circle at 70% 70%, #fff 12%, transparent 13%);
+            background-size: 9px 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+        }
+        .scroll-header::before { left: 10px; }
+        .scroll-header::after { right: 10px; transform: translateY(-50%) scaleX(-1); }
+        .title {
+            font-size: 1.65em;
+            font-weight: bold;
+            color: var(--crimson);
+            text-shadow: 1.5px 1.5px 3px rgba(0,0,0,0.4);
+            letter-spacing: 2.5px;
+        }
+        .subtitle {
+            font-size: 0.88em;
+            color: var(--dragon);
+            margin-top: 3px;
+            letter-spacing: 1.5px;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            padding: 8px 0;
+            max-height: 40vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .choice-btn {
+            background: linear-gradient(135deg, #00cc77, #009b5f);
+            color: white;
+            border: none;
+            padding: 15px 17px;
+            border-radius: 13px;
+            font-size: 0.98em;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 12px rgba(0,166,107,0.35);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-height: 58px;
+        }
+        .choice-btn::before {
+            content: '玺';
+            font-weight: bold;
+            color: var(--gold);
+            background: var(--crimson);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15em;
+            box-shadow: 0 0 10px rgba(0,0,0,0.35);
+            flex-shrink: 0;
+        }
+        .choice-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 3px 8px rgba(0,166,107,0.45);
+        }
+
+        .status-bar {
+            display: flex;
+            background: rgba(0,0,0,0.35);
+            padding: 9px;
+            border-radius: 13px;
+            font-size: 0.76em;
+            gap: 7px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(5px);
+        }
+        .stat {
+            flex: 1;
+            min-width: 62px;
+            text-align: center;
+        }
+        .stat-label {
+            color: #d4af37;
+            margin-bottom: 4px;
+            font-size: 0.72em;
+            font-weight: bold;
+        }
+        .stat-bar {
+            height: 7px;
+            background: rgba(255,255,255,0.35);
+            border-radius: 3.5px;
+            overflow: hidden;
+        }
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff3366, #ffcc00);
+            border-radius: 3.5px;
+            transition: width 0.6s ease;
+        }
+
+        .timeline {
+            background: rgba(139,69,19,0.98);
+            padding: 9px 18px;
+            border-radius: 32px;
+            border: 2.5px solid var(--gold);
+            font-size: 0.92em;
+            color: var(--paper);
+            box-shadow: 0 5px 14px rgba(0,0,0,0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+        .year-dragon {
+            width: 26px;
+            height: 26px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 23 C33 23, 23 40, 27 60 C22 72, 33 85, 50 79 C67 85, 78 72, 73 60 C77 40, 67 23, 50 23" fill="%23d4af37" stroke="%23b8860b" stroke-width="2.5"/><circle cx="41" cy="47" r="7" fill="%23000"/><circle cx="59" cy="47" r="7" fill="%23000"/><path d="M36 55 Q50 66, 64 55" stroke="%23fff" stroke-width="2.5" fill="none"/></svg>') center/contain no-repeat;
+        }
+
+        .game-over {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 22px;
+            z-index: 100;
+            gap: 18px;
+        }
+        .game-over h1 {
+            font-size: 2.3em;
+            color: var(--crimson);
+            text-shadow: 0 0 18px var(--crimson);
+        }
+        .game-over p {
+            font-size: 1.05em;
+            max-width: 90%;
+            line-height: 1.7;
+            color: var(--bright-yellow);
+            text-shadow: var(--text-glow);
+        }
+        .restart-btn {
+            margin-top: 22px;
+            padding: 13px 36px;
+            background: var(--gold);
+            color: var(--ink);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 7px 18px rgba(212,175,55,0.45);
+        }
+
+        @font-face {
+            font-family: 'KaiTi';
+            src: local('KaiTi'), local('楷体'), local('STKaiti');
+            unicode-range: U+4E00-9FFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-container"></div>
+
+    <div id="game">
+        <div class="container">
+            <div class="scroll-header">
+                <div class="title">崇祯十七年</div>
+                <div class="subtitle">——朕即国家·工业革命——</div>
+            </div>
+
+            <div class="memorial" id="eventText">
+                <p>崇祯十七年三月，京师告急。李自成围城，吴三桂降清。传教士汤若望献红夷大炮图纸。</p>
+                <p class="highlight">国库空虚，如何抉择？</p>
+            </div>
+
+            <div class="choices" id="choices"></div>
+
+            <div class="status-bar">
+                <div class="stat">
+                    <div class="stat-label">国库</div>
+                    <div class="stat-bar"><div class="stat-fill" id="treasury" style="width:20%"></div></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">军心</div>
+                    <div class="stat-bar"><div class="stat-fill" id="morale" style="width:30%"></div></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">民心</div>
+                    <div class="stat-bar"><div class="stat-fill" id="support" style="width:40%"></div></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">科技</div>
+                    <div class="stat-bar"><div class="stat-fill" id="tech" style="width:5%"></div></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">工业</div>
+                    <div class="stat-bar"><div class="stat-fill" id="industry" style="width:0%"></div></div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="year-dragon"></div>
+                <span id="yearDisplay">崇祯十七年三月</span>
+                <div class="year-dragon"></div>
+            </div>
+        </div>
+
+        <div class="game-over" id="gameOver" style="display:none;">
+            <h1 id="endingTitle">大明中兴</h1>
+            <p id="endingText">至1660年，大明完成工业革命，铁路遍布，舰队称霸，火炮震慑四夷。清廷崩溃，朕收复燕京，立“中华联邦”。</p>
+            <button class="restart-btn" onclick="restart()">重开一局</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 延长至15大事件（1644→1660） ====================
+        const events = [
+            // 1644
+            { id:1, year:1644, month:3, text:`<p>崇祯十七年三月，京师告急。李自成围城，吴三桂降清。传教士汤若望献红夷大炮图纸。</p><p class="highlight">国库仅剩两成，如何抉择？</p>`, choices:[
+                {text:"变卖宫中金银，铸炮抗清", effect:()=>{s.treasury-=15;s.tech+=28;s.industry+=10;}, correct:true},
+                {text:"拒绝西法，信奉传统火铳", effect:()=>{s.morale-=22;s.qing+=18;}},
+                {text:"向江南富商借贷", effect:()=>{s.treasury+=22;s.support-=14;}},
+                {text:"命汤若望训练新军", effect:()=>{s.morale+=20;s.tech+=15;}}
+            ]},
+            { id:2, year:1644, month:6, text:`<p>山海关大战在即，铸炮需银三十万两，宫中仅剩十万。</p><p class="highlight">是否下罪己诏，号召全国捐银？</p>`, choices:[
+                {text:"罪己诏+捐银，铸炮决战", effect:()=>{s.support+=18;s.treasury+=28;s.morale+=12;}, correct:true},
+                {text:"拒绝捐银，固守北京", effect:()=>{s.morale-=28;s.qing+=22;}},
+                {text:"迁都南京，保存实力", effect:()=>{s.support-=22;s.treasury+=12;}},
+                {text:"向葡萄牙借炮", effect:()=>{s.tech+=22;s.treasury-=18;}}
+            ]},
+            { id:3, year:1644, month:9, text:`<p>清军入关，势如破竹。然江南织造局技工研发水力纺纱机，可日产布千匹。</p><p class="highlight">保守派称奇技淫巧，如何处置？</p>`, choices:[
+                {text:"设立“机器局”，全国推广", effect:()=>{s.industry+=35;s.tech+=18;s.support-=12;}, correct:true},
+                {text:"仅军工厂使用", effect:()=>{s.industry+=18;s.support+=10;}},
+                {text:"焚毁图纸", effect:()=>{s.tech-=40;s.qing+=28;}},
+                {text:"奖励发明，赐“工业博士”", effect:()=>{s.support+=22;s.industry+=12;}}
+            ]},
+            // 1645
+            { id:4, year:1645, month:1, text:`<p>南明弘光帝在南京称孤。然清军南下，南京危急。</p><p class="highlight">是否出兵援救，统一南方？</p>`, choices:[
+                {text:"挥师南下，统一抗清", effect:()=>{s.morale+=22;s.support+=18;s.treasury-=22;}, correct:true},
+                {text:"固守北京，待机而动", effect:()=>{s.morale-=18;s.qing+=22;}},
+                {text:"与弘光帝联姻", effect:()=>{s.support+=12;s.morale+=8;}},
+                {text:"坐视南京陷落", effect:()=>{s.support-=28;s.qing+=35;}}
+            ]},
+            { id:5, year:1645, month:6, text:`<p>蒸汽机雏形问世，可驱动水车、风箱。需建铁厂，耗银百万两。</p><p class="highlight">国库仅剩四成，是否投入？</p>`, choices:[
+                {text:"举国之力，建铁厂", effect:()=>{s.industry+=45;s.tech+=28;s.treasury-=35;}, correct:true},
+                {text:"仅建小型铁厂", effect:()=>{s.industry+=22;s.treasury-=18;}},
+                {text:"暂缓建设", effect:()=>{s.industry-=12;s.qing+=18;}},
+                {text:"向荷兰借技术", effect:()=>{s.tech+=35;s.treasury-=22;}}
+            ]},
+            // 1646-1650
+            { id:6, year:1646, month:3, text:`<p>铁路试验成功，南京至苏州仅需两时辰。是否全国铺设？</p><p class="highlight">耗资巨大，需十年完成。</p>`, choices:[
+                {text:"全国铁路网，十年计划", effect:()=>{s.industry+=55;s.tech+=35;s.treasury-=45;}, correct:true},
+                {text:"仅军事铁路", effect:()=>{s.industry+=28;s.morale+=18;}},
+                {text:"暂不铺设", effect:()=>{s.industry-=18;}},
+                {text:"引入英国资本", effect:()=>{s.treasury+=35;s.support-=18;}}
+            ]},
+            { id:7, year:1648, month:1, text:`<p>火轮船下水，可日行千里。舰队可下南洋，夺取香料贸易。</p><p class="highlight">是否组建远洋舰队？</p>`, choices:[
+                {text:"组建远洋舰队，称霸南海", effect:()=>{s.treasury+=45;s.industry+=35;s.tech+=25;}, correct:true},
+                {text:"仅沿海防御", effect:()=>{s.morale+=18;s.treasury+=12;}},
+                {text:"封海禁海", effect:()=>{s.treasury-=35;s.support-=22;}},
+                {text:"与西班牙合作", effect:()=>{s.treasury+=28;s.tech+=18;}}
+            ]},
+            { id:8, year:1650, month:6, text:`<p>清军围攻云南。然大明铁路通全国，火炮日产百门，舰队下西洋。</p><p class="highlight">是否北伐，收复燕京？</p>`, choices:[
+                {text:"挥师北上，完成统一", effect:()=>endGame(true), correct:true},
+                {text:"与清廷和谈", effect:()=>endGame(false)},
+                {text:"继续工业，十年后再战", effect:()=>{s.year+=10;s.industry+=35;}},
+                {text:"禅位，建立宪政", effect:()=>endGame(true,"宪政结局")}
+            ]},
+            // 1651-1660：工业深化
+            { id:9, year:1652, month:3, text:`<p>电报试验成功，北京至南京瞬息可达。是否全国铺设？</p><p class="highlight">耗资五百万两，需五年。</p>`, choices:[
+                {text:"全国电报网", effect:()=>{s.tech+=60;s.treasury-=50;s.morale+=20;}, correct:true},
+                {text:"仅军用", effect:()=>{s.tech+=30;s.morale+=15;}},
+                {text:"暂不建设", effect:()=>{s.tech-=15;}},
+                {text:"向法国借技术", effect:()=>{s.tech+=40;s.treasury-=30;}}
+            ]},
+            { id:10, year:1655, month:1, text:`<p>钢铁年产百万吨，火炮日产千门。然工人罢工，要求八小时工作制。</p><p class="highlight">如何应对？</p>`, choices:[
+                {text:"颁布劳工法，八小时工作制", effect:()=>{s.support+=30;s.industry+=20;s.morale+=15;}, correct:true},
+                {text:"镇压罢工", effect:()=>{s.support-=35;s.morale-=20;}},
+                {text:"加薪不减工时", effect:()=>{s.treasury-=30;s.support+=15;}},
+                {text:"引入机器替代工人", effect:()=>{s.industry+=25;s.support-=20;}}
+            ]},
+            { id:11, year:1657, month:9, text:`<p>蒸汽战车试验成功，可载兵百人，日行百里。是否量产？</p><p class="highlight">每辆耗银万两，需建新厂。</p>`, choices:[
+                {text:"量产战车，组建铁甲军", effect:()=>{s.morale+=40;s.industry+=30;s.treasury-=40;}, correct:true},
+                {text:"仅试制十辆", effect:()=>{s.morale+=20;s.industry+=15;}},
+                {text:"暂不量产", effect:()=>{s.morale-=15;}},
+                {text:"出口换取外援", effect:()=>{s.treasury+=35;s.support-=15;}}
+            ]},
+            { id:12, year:1660, month:6, text:`<p>大明工业称霸东亚，铁路通西伯利亚，舰队抵欧洲。清廷残部龟缩漠北。</p><p class="highlight">是否全球扩张，建立世界帝国？</p>`, choices:[
+                {text:"称霸全球，建立大明帝国", effect:()=>endGame(true,"全球霸主"), correct:true},
+                {text:"固守东亚，休养生息", effect:()=>endGame(true,"东亚霸主")},
+                {text:"推广工业，援助列强", effect:()=>endGame(true,"工业先驱")},
+                {text:"内乱爆发，帝国分裂", effect:()=>endGame(false,"内部分裂")}
+            ]}
+        ];
+
+        const s = { year:1644, month:3, treasury:20, morale:30, support:40, tech:5, industry:0, qing:0, history:[] };
+        let currentEvent = 0;
+
+        function render() {
+            if (currentEvent >= events.length) { endGame(true); return; }
+            const e = events[currentEvent];
+            s.year = e.year; s.month = e.month;
+            document.getElementById('yearDisplay').textContent = `${getLunarYear(s.year)}年${s.month}月`;
+            document.getElementById('eventText').innerHTML = e.text;
+            const choicesDiv = document.getElementById('choices');
+            choicesDiv.innerHTML = '';
+
+            e.choices.forEach((c, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerHTML = `<span>${c.text}</span>`;
+                btn.onclick = () => {
+                    if (c.effect) c.effect();
+                    if (c.correct) btn.classList.add('correct');
+                    else if (i > 0) btn.classList.add('wrong');
+                    s.history.push({event: e.id, choice: c.text, year: s.year, month: s.month});
+                    updateStats();
+
+                    // 胜负判定
+                    if (s.treasury <= 0) return endGame(false, "国库枯竭，全国哗变");
+                    if (s.support < 10) return endGame(false, "民心尽失，起义四起");
+                    if (s.morale < 10) return endGame(false, "军心崩溃，兵变频发");
+                    if (s.qing > 80) return endGame(false, "清军势大，京师陷落");
+
+                    setTimeout(() => { currentEvent++; render(); }, 1300);
+                };
+                choicesDiv.appendChild(btn);
+            });
+        }
+
+        function updateStats() {
+            const clamp = (v) => Math.max(0, Math.min(100, v));
+            document.getElementById('treasury').style.width = `${clamp(s.treasury)}%`;
+            document.getElementById('morale').style.width = `${clamp(s.morale)}%`;
+            document.getElementById('support').style.width = `${clamp(s.support)}%`;
+            document.getElementById('tech').style.width = `${clamp(s.tech)}%`;
+            document.getElementById('industry').style.width = `${clamp(s.industry)}%`;
+        }
+
+        function getLunarYear(y) {
+            const stems = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+            const branches = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+            return stems[(y - 4) % 10] + branches[(y - 4) % 12];
+        }
+
+        function endGame(win, type = "") {
+            const go = document.getElementById('gameOver');
+            go.style.display = 'flex';
+            const title = win ? (type === "全球霸主" ? "世界帝国" : type === "东亚霸主" ? "东亚霸主" : type === "工业先驱" ? "工业先驱" : "大明中兴") : "国破家亡";
+            document.getElementById('endingTitle').textContent = title;
+            document.getElementById('endingText').innerHTML = win ?
+                `<p>至${s.year}年，大明完成工业革命，${type.includes('世界') ? '舰队环游全球，铁路连接欧亚' : type.includes('东亚') ? '东亚无人能敌，贸易称霸' : '技术输出全球，文化复兴'}。清廷灭亡，中华复兴！</p><p>历史改写，民族永昌！</p>` :
+                `<p>奈何天不助明：${type || '多重危机并发'}，京师陷落，朕自缢煤山。</p><p>大明亡，华夏沉沦二百六十八年。</p>`;
+        }
+
+        function restart() {
+            Object.assign(s, {year:1644,month:3,treasury:20,morale:30,support:40,tech:5,industry:0,qing:0,history:[]});
+            currentEvent = 0;
+            document.getElementById('gameOver').style.display = 'none';
+            render();
+        }
+
+        window.onload = () => {
+            document.fonts.ready.then(render);
+        };
+    </script>
+</body>
+</html>
